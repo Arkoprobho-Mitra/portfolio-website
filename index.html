@@ -1,0 +1,2178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arkoprobho Mitra — AI Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IM+Fell+English:ital@0;1&family=Special+Elite&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --ink-light: #3d2e18;
+    --ink-faint: #5a4a3a;
+    --paper: #f5edd8;
+    --paper-aged: #ede0c0;
+    --paper-dark: #d9c89a;
+    --coffee: #6b3f1e;
+    --coffee-light: #a0673a;
+    --coffee-pale: #c49a6c;
+    --sepia: #8b6914;
+    --red-stamp: #8b1a1a;
+    --forest: #2d5a27;
+    --forest-light: #3d7a36;
+    --forest-pale: #6aaa62;
+    --forest-faint: rgba(45,90,39,0.12);
+    --divider: rgba(107, 63, 30, 0.35);
+    --shadow: rgba(26,18,8,0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Libre Baskerville', Georgia, serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 31px,
+        rgba(107,63,30,0.06) 31px,
+        rgba(107,63,30,0.06) 32px
+      );
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  /* ───── CONTACT SECTION ───── */
+  .contact-card {
+    max-width: 580px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .contact-tagline {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink-light);
+    margin-bottom: 2.5rem;
+  }
+
+  .contact-block {
+    border-top: 3px double var(--coffee);
+    border-bottom: 3px double var(--coffee);
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    color: var(--ink);
+    transition: background 0.2s, color 0.2s;
+    border-bottom: 1px solid var(--divider);
+    text-align: left;
+  }
+
+  .contact-row:last-child { border-bottom: none; }
+
+  .contact-row:hover {
+    background: var(--coffee);
+    color: var(--paper);
+  }
+
+  .contact-row:hover .contact-label { color: var(--paper-dark); }
+
+  .contact-icon {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    line-height: 1;
+    width: 1.5rem;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .contact-label {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: block;
+    margin-bottom: 0.2rem;
+    transition: color 0.2s;
+  }
+
+  .contact-value {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 0.95rem;
+    display: block;
+  }
+
+  .contact-social {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  /* ───── TOAST ───── */
+  #contact-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Special Elite', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    padding: 0.6rem 1.4rem;
+    border: 1px solid var(--coffee-pale);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 999;
+    white-space: nowrap;
+  }
+
+  #contact-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ───── NAVIGATION ───── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--coffee);
+    border-bottom: 3px double rgba(245,237,216,0.3);
+    padding: 0.6rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Special Elite', monospace;
+    letter-spacing: 0.12em;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    color: var(--paper-aged);
+  }
+
+  nav .nav-brand {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    color: var(--paper);
+    text-transform: none;
+    border-bottom: none;
+  }
+
+  nav a.nav-brand:hover {
+    color: var(--paper);
+    border-bottom: none;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+  }
+
+  nav a {
+    color: var(--paper-aged);
+    text-decoration: none;
+    transition: color 0.2s;
+    border-bottom: 1px solid transparent;
+  }
+
+  nav a:hover {
+    color: var(--paper);
+    border-bottom-color: var(--coffee-pale);
+  }
+
+  /* ───── MASTHEAD / HERO ───── */
+  .masthead {
+    padding: 7rem 2rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+  }
+
+  .masthead-rule {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.1s;
+  }
+
+  .masthead-rule::before,
+  .masthead-rule::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--coffee);
+  }
+
+  .edition-tag {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--coffee);
+    white-space: nowrap;
+  }
+
+  .masthead h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.3s;
+  }
+
+  .masthead-subtitle {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--coffee);
+    margin-bottom: 0.8rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.5s;
+  }
+
+  .masthead-rule2 {
+    border: none;
+    border-top: 3px double var(--coffee);
+    margin: 0.8rem 0;
+    opacity: 0;
+    animation: fadeIn 0.8s ease forwards 0.6s;
+  }
+
+  .tagline {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-style: italic;
+    font-size: 1.35rem;
+    color: var(--ink-light);
+    margin: 1rem 0;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.7s;
+  }
+
+  .tagline::before { content: '\201C'; }
+  .tagline::after  { content: '\201D'; }
+
+  .location-line {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.9s;
+  }
+
+  .cta-row {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 1.1s;
+  }
+
+  .btn {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.65rem 1.6rem;
+    border: 1.5px solid var(--coffee);
+    color: var(--coffee);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--coffee);
+    transform: translateX(-101%);
+    transition: transform 0.25s ease;
+    z-index: 0;
+  }
+
+  .btn:hover::before { transform: translateX(0); }
+  .btn:hover { color: var(--paper); }
+  .btn span { position: relative; z-index: 1; }
+
+  .btn-filled {
+    background: var(--coffee);
+    color: var(--paper);
+  }
+
+  .btn-filled::before { background: var(--ink); }
+
+  /* ───── SECTION WRAPPER ───── */
+  section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    position: relative;
+    scroll-margin-top: 55px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-header::before,
+  .section-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--coffee);
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--ink);
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+  }
+
+  /* ───── ABOUT ───── */
+  .about-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .about-columns p {
+    font-size: 1rem;
+    color: var(--ink-light);
+    line-height: 1.9;
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  .about-columns p + p {
+    margin-top: 1rem;
+  }
+
+  .drop-cap::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 4.2rem;
+    font-weight: 900;
+    float: left;
+    line-height: 0.75;
+    padding-right: 0.1em;
+    color: var(--coffee);
+    margin-top: 0.1em;
+  }
+
+  .about-stamp {
+    text-align: center;
+    padding: 2rem;
+    border: 2px solid var(--coffee-light);
+    position: relative;
+    background: var(--paper-aged);
+  }
+
+  .about-stamp::before {
+    content: 'ESTABLISHED';
+    position: absolute;
+    top: -0.55rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--paper-aged);
+    padding: 0 0.5rem;
+    font-family: 'Special Elite', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--coffee);
+  }
+
+  .stamp-year {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: var(--coffee);
+    line-height: 1;
+  }
+
+  .stamp-label {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 0.5rem;
+  }
+
+  .stamp-divider {
+    border: none;
+    border-top: 1px solid var(--coffee-light);
+    margin: 1rem 0;
+  }
+
+  .stamp-tag {
+    display: inline-block;
+    font-family: 'Special Elite', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: var(--red-stamp);
+    padding: 0.3rem 0.8rem;
+    transform: rotate(-2deg);
+    margin-top: 0.5rem;
+  }
+
+  /* ───── SKILLS ───── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid var(--divider);
+  }
+
+  .skill-column {
+    padding: 1.5rem 1.2rem;
+    border-right: 1px solid var(--divider);
+    background: var(--paper-aged);
+  }
+
+  .skill-column:last-child { border-right: none; }
+
+  .skill-column:nth-child(even) { background: var(--paper); }
+
+  .skill-col-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--coffee);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--divider);
+    padding-bottom: 0.6rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .skill-tag {
+    display: inline-block;
+    font-family: 'Special Elite', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    background: rgba(107,63,30,0.07);
+    border: 0.5px solid var(--divider);
+    padding: 0.2rem 0.5rem;
+    margin: 0.2rem 0.1rem;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .skill-tag:hover {
+    background: var(--coffee);
+    color: var(--paper);
+    border-color: var(--coffee);
+  }
+
+  /* ───── PROJECTS ───── */
+  .project-card {
+    border: 1px solid var(--divider);
+    background: var(--paper-aged);
+    margin-bottom: 2.5rem;
+    position: relative;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .project-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .project-card-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: start;
+    padding: 1.5rem 1.5rem 1rem;
+    border-bottom: 1px solid var(--divider);
+    background: var(--paper);
+  }
+
+  .project-number {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .project-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  .project-tagline {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--coffee-light);
+    margin-top: 0.3rem;
+  }
+
+  .project-badge {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    border: 1px solid;
+    white-space: nowrap;
+    align-self: start;
+  }
+
+  .badge-production { color: var(--red-stamp); border-color: var(--red-stamp); }
+  .badge-agentic    { color: var(--sepia);    border-color: var(--sepia); }
+  .badge-system     { color: var(--coffee);   border-color: var(--coffee); }
+
+  .project-body { padding: 1.5rem; }
+
+  .project-overview {
+    font-size: 0.98rem;
+    color: var(--ink-light);
+    line-height: 1.85;
+    margin-bottom: 1.2rem;
+    text-align: justify;
+    hyphens: auto;
+    border-left: 3px solid var(--coffee-pale);
+    padding-left: 1rem;
+    font-style: italic;
+  }
+
+  .project-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .detail-block h4 {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--coffee);
+    margin-bottom: 0.5rem;
+    border-bottom: 0.5px solid var(--divider);
+    padding-bottom: 0.3rem;
+  }
+
+  .detail-block ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .detail-block li {
+    font-size: 0.88rem;
+    color: var(--ink-light);
+    padding: 0.2rem 0;
+    padding-left: 1rem;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .detail-block li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--coffee-pale);
+    font-size: 0.7rem;
+    top: 0.3rem;
+  }
+
+  .project-tech-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 0.5px dashed var(--divider);
+    align-items: center;
+  }
+
+  .tech-label {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-right: 0.3rem;
+  }
+
+  .tech-chip {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    color: var(--paper);
+    background: var(--coffee);
+    padding: 0.18rem 0.55rem;
+  }
+
+  .project-link {
+    display: inline-block;
+    margin-top: 1rem;
+    font-family: 'Special Elite', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--coffee);
+    text-decoration: none;
+    border-bottom: 1px solid var(--coffee-pale);
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .project-link:hover {
+    color: var(--red-stamp);
+    border-color: var(--red-stamp);
+  }
+
+  /* Architecture diagram inside project */
+  .arch-box {
+    background: var(--paper);
+    border: 1px solid var(--divider);
+    padding: 1rem;
+    margin: 1rem 0;
+    font-family: 'Special Elite', monospace;
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    overflow-x: auto;
+  }
+
+  .arch-flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    line-height: 2;
+  }
+
+  .arch-node {
+    background: var(--paper-dark);
+    border: 0.5px solid var(--coffee-pale);
+    padding: 0.2rem 0.6rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  .arch-arrow {
+    color: var(--coffee-pale);
+    font-size: 0.8rem;
+  }
+
+  /* Cost table */
+  .mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Special Elite', monospace;
+    font-size: 0.68rem;
+    margin-top: 0.5rem;
+  }
+
+  .mini-table th {
+    background: var(--coffee);
+    color: var(--paper);
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 0.6rem;
+  }
+
+  .mini-table td {
+    padding: 0.35rem 0.6rem;
+    border-bottom: 0.5px solid var(--divider);
+    color: var(--ink-light);
+  }
+
+  .mini-table tr:nth-child(even) td {
+    background: rgba(107,63,30,0.04);
+  }
+
+  /* ───── FOOTER ───── */
+  footer {
+    background: var(--coffee);
+    color: var(--paper-aged);
+    padding: 3rem 2rem;
+    text-align: center;
+    border-top: 3px double rgba(245,237,216,0.3);
+    margin-top: 4rem;
+    scroll-margin-top: 55px;
+  }
+
+  footer .footer-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-style: italic;
+    color: var(--paper);
+    margin-bottom: 0.5rem;
+  }
+
+  footer p {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--coffee-pale);
+    margin: 0.3rem 0;
+  }
+
+  footer a {
+    color: var(--paper-aged);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(245,237,216,0.3);
+  }
+
+  .footer-divider {
+    border: none;
+    border-top: 1px solid rgba(245,237,216,0.2);
+    margin: 1.5rem auto;
+    max-width: 300px;
+  }
+
+  /* ───── COLUMN DIVIDER (newspaper style) ───── */
+  .newspaper-columns {
+    column-count: 2;
+    column-gap: 3rem;
+    column-rule: 1px solid var(--divider);
+  }
+
+  .newspaper-columns p {
+    font-size: 0.95rem;
+    color: var(--ink-light);
+    line-height: 1.9;
+    text-align: justify;
+    hyphens: auto;
+    break-inside: avoid;
+  }
+
+  /* ───── ANIMATIONS ───── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ───── DECORATIVE ELEMENTS ───── */
+  .ornament {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    color: var(--coffee-pale);
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+    letter-spacing: 0.5em;
+  }
+
+  .wide-rule {
+    border: none;
+    border-top: 1px solid var(--divider);
+    margin: 0;
+  }
+
+  .double-rule {
+    border: none;
+    border-top: 3px double var(--coffee);
+    margin: 0.3rem 0;
+  }
+
+  .dateline {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.5rem;
+  }
+
+  /* ───── PULL QUOTE ───── */
+  .pull-quote {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--coffee);
+    border-top: 2px solid var(--coffee);
+    border-bottom: 2px solid var(--coffee);
+    padding: 1rem 0;
+    text-align: center;
+    margin: 2rem 0;
+    line-height: 1.4;
+  }
+
+  /* ───── METRICS GRID (extracted from inline) ───── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid var(--divider);
+    margin-bottom: 1.5rem;
+    margin-top: 1rem;
+  }
+  .metrics-grid-cell {
+    padding: 1rem 0.8rem;
+    text-align: center;
+    border-right: 1px solid var(--divider);
+  }
+  .metrics-grid-cell:last-child { border-right: none; }
+  .metrics-grid-cell:nth-child(odd)  { background: var(--paper); }
+  .metrics-grid-cell:nth-child(even) { background: var(--paper-aged); }
+  .metrics-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--coffee);
+    line-height: 1;
+  }
+  .metrics-lbl {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 0.3rem;
+  }
+
+  /* ───── FOREST GREEN ACCENTS ───── */
+  .badge-enterprise { color: var(--forest); border-color: var(--forest); }
+
+  .skill-tag:hover {
+    background: var(--forest);
+    color: var(--paper);
+    border-color: var(--forest);
+  }
+
+  .section-header::before,
+  .section-header::after {
+    background: linear-gradient(to right, var(--coffee), var(--forest));
+  }
+
+  .project-overview {
+    border-left-color: var(--forest-pale);
+  }
+
+  .detail-block li::before {
+    color: var(--forest-pale);
+  }
+
+  .arch-node {
+    border-color: var(--forest-pale);
+  }
+
+  .arch-arrow {
+    color: var(--forest-pale);
+  }
+
+  .experience-card {
+    border: 1px solid var(--divider);
+    background: var(--paper-aged);
+    margin-bottom: 2rem;
+    position: relative;
+  }
+  .experience-header {
+    padding: 1.2rem 1.5rem 0.8rem;
+    border-bottom: 1px solid var(--divider);
+    background: var(--paper);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 1rem;
+  }
+  .experience-company {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .experience-role {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--forest);
+    margin-top: 0.2rem;
+  }
+  .experience-date {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    white-space: nowrap;
+    text-align: right;
+  }
+  .experience-body { padding: 1.2rem 1.5rem; }
+  .experience-project {
+    margin-bottom: 1.4rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 0.5px dashed var(--divider);
+  }
+  .experience-project:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .experience-project-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--forest);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .experience-project-title::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: var(--forest-pale);
+    opacity: 0.5;
+  }
+  .experience-project ul {
+    list-style: none;
+    padding: 0;
+  }
+  .experience-project li {
+    font-size: 0.88rem;
+    color: var(--ink-light);
+    padding: 0.22rem 0 0.22rem 1.1rem;
+    position: relative;
+    line-height: 1.55;
+  }
+  .experience-project li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--forest-pale);
+    font-size: 0.7rem;
+    top: 0.3rem;
+  }
+  .exp-metrics {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 0;
+    border: 1px solid var(--divider);
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .exp-metric-cell {
+    padding: 0.7rem;
+    text-align: center;
+    border-right: 1px solid var(--divider);
+    background: var(--paper);
+  }
+  .exp-metric-cell:last-child { border-right: none; background: var(--paper-aged); }
+  .exp-metric-cell:nth-child(2) { background: var(--paper-aged); }
+  .exp-metric-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--forest);
+    line-height: 1;
+  }
+  .exp-metric-lbl {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 0.2rem;
+  }
+
+  .pub-card {
+    border: 1px solid var(--forest-pale);
+    background: var(--paper);
+    padding: 1.2rem 1.5rem;
+    margin-top: 0.5rem;
+    border-left: 4px solid var(--forest);
+  }
+  .pub-title {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink);
+    line-height: 1.5;
+    margin-bottom: 0.4rem;
+  }
+  .pub-meta {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--forest);
+    text-transform: uppercase;
+  }
+  .pub-desc {
+    font-size: 0.84rem;
+    color: var(--ink-faint);
+    margin-top: 0.5rem;
+    line-height: 1.6;
+  }
+
+  /* ───── RESPONSIVE ───── */
+  @media (max-width: 700px) {
+    .about-columns { grid-template-columns: 1fr; }
+    .skills-grid   { grid-template-columns: 1fr 1fr; }
+    .project-detail-grid { grid-template-columns: 1fr; }
+    .metrics-grid  { grid-template-columns: 1fr 1fr; }
+    .exp-metrics   { grid-template-columns: 1fr; }
+    nav ul { display: none; }
+    .masthead h1 { font-size: 2.8rem; }
+    .experience-header { grid-template-columns: 1fr; }
+  }
+
+  /* ───── SCALE CALLOUT (under-the-hood box) ───── */
+  .scale-callout {
+    border: 1px solid var(--forest-pale);
+    border-left: 4px solid var(--forest);
+    background: var(--forest-faint);
+    padding: 1rem 1.2rem;
+    margin: 1.2rem 0 0.5rem;
+  }
+  .scale-callout-label {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--forest);
+    margin-bottom: 0.4rem;
+  }
+  .scale-callout p {
+    font-size: 0.84rem;
+    color: var(--ink-light);
+    line-height: 1.65;
+  }
+
+  @media (max-width: 700px) {
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <a href="#" class="nav-brand">Arkoprobho Mitra</a>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="Arkoprobho_Mitra_CV_revised.pdf" download="Arkoprobho_Mitra_CV.pdf" style="color:var(--forest-pale);border-bottom:1px solid var(--forest-pale);">Download CV ↓</a></li>
+  </ul>
+</nav>
+
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-rule">
+    <span class="edition-tag">Vol. I &ensp;·&ensp; Kolkata, India &ensp;·&ensp; AI Systems Quarterly</span>
+  </div>
+
+  <div class="double-rule"></div>
+  <div class="wide-rule"></div>
+
+  <h1>Arkoprobho<br>Mitra</h1>
+
+  <p class="masthead-subtitle">AI Engineer &nbsp;·&nbsp; LLM Systems &nbsp;·&nbsp; Agentic Pipelines &nbsp;·&nbsp; AWS Certified</p>
+
+  <div class="wide-rule"></div>
+  <div class="double-rule"></div>
+
+  <p class="tagline">I build AI systems that do things — not just answer questions.</p>
+
+  <p class="location-line">📍 Kolkata, India &nbsp;·&nbsp; Ready for Deployment!</p>
+
+  <div class="cta-row">
+    <a href="mailto:arko.mitra223@gmail.com?subject=Opportunity%20%E2%80%94%20Let%27s%20Connect" class="btn btn-filled"><span>Contact Me ✉</span></a>
+    <a href="Arkoprobho_Mitra_CV_revised.pdf" download="Arkoprobho_Mitra_CV.pdf" class="btn"><span>Download CV ↓</span></a>
+    <a href="https://github.com/Arkoprobho-Mitra" target="_blank" class="btn"><span>GitHub ↗</span></a>
+  </div>
+</div>
+
+<hr class="wide-rule" style="max-width:900px;margin:0 auto;">
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <span class="section-title">About the Engineer</span>
+  </div>
+
+  <div class="about-columns">
+    <div>
+      <p class="dateline">Kolkata · AI Systems Desk · Infosys Topaz Applied AI Practice</p>
+      <p class="drop-cap">AI Engineer with 5+ years shipping production GenAI and ML systems at Infosys Topaz. Currently leading sub-teams building stateful multi-agent orchestration, enterprise RAG, and ML systems that run at the intersection of applied LLMs and rigorous software engineering.</p>
+      <p style="margin-top:1rem;">The work goes deeper than wrapping APIs — hybrid retrieval with Reciprocal Rank Fusion, RAGAS evaluation gates in CI/CD, SHAP-explained fraud models on 800K-claim datasets, and zero-secret agent architectures with Azure Managed Identity. B.E. Jadavpur University · AWS Certified Cloud Practitioner · Springer research author on multilingual OCR. Cost-optimised, observable, and secure from day one.</p>
+    </div>
+    <div>
+      <div class="about-stamp">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--divider);margin-bottom:1rem;">
+          <div style="padding:1rem 0.8rem;border-right:1px solid var(--divider);text-align:center;">
+            <div style="font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:900;color:var(--coffee);line-height:1;">5+</div>
+            <div style="font-family:'Special Elite',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Years in the Field</div>
+          </div>
+          <div style="padding:1rem 0.8rem;text-align:center;">
+            <div style="font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:900;color:var(--coffee);line-height:1;">10+</div>
+            <div style="font-family:'Special Elite',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Projects Shipped</div>
+          </div>
+          <div style="padding:1rem 0.8rem;border-right:1px solid var(--divider);border-top:1px solid var(--divider);text-align:center;">
+            <div style="font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:900;color:var(--forest);line-height:1;">30k+</div>
+            <div style="font-family:'Special Elite',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Monthly Active Users</div>
+          </div>
+          <div style="padding:1rem 0.8rem;border-top:1px solid var(--divider);text-align:center;">
+            <div style="font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:900;color:var(--forest);line-height:1;">3</div>
+            <div style="font-family:'Special Elite',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Enterprise AI Systems</div>
+          </div>
+        </div>
+        <div style="font-family:'Special Elite',monospace;font-size:0.6rem;color:var(--ink-faint);letter-spacing:0.1em;line-height:1.8;text-align:center;">
+          LLM · RAG · Multi-Agent · Agentic Pipelines<br>
+          FastAPI · LangGraph · Vercel · AWS EC2
+        </div>
+        <div class="stamp-tag">PRODUCTION READY</div>
+      </div>
+
+      <div class="pull-quote" style="font-size:1.1rem;margin-top:1.5rem;">
+        "The stack goes deeper than the framework. I understand what's underneath."
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="wide-rule" style="max-width:900px;margin:0 auto;">
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header">
+    <span class="section-title">The Toolkit</span>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-column">
+      <div class="skill-col-title">AI / LLM</div>
+      <span class="skill-tag">LangGraph</span>
+      <span class="skill-tag">LangChain</span>
+      <span class="skill-tag">RAG</span>
+      <span class="skill-tag">RAGAS</span>
+      <span class="skill-tag">LangFuse</span>
+      <span class="skill-tag">CrewAI</span>
+      <span class="skill-tag">MCP</span>
+      <span class="skill-tag">FAISS</span>
+      <span class="skill-tag">Pydantic AI</span>
+      <span class="skill-tag">Anthropic SDK</span>
+      <span class="skill-tag">OpenAI SDK</span>
+      <span class="skill-tag">LiteLLM</span>
+    </div>
+    <div class="skill-column">
+      <div class="skill-col-title">ML & Data</div>
+      <span class="skill-tag">XGBoost</span>
+      <span class="skill-tag">LightGBM</span>
+      <span class="skill-tag">scikit-learn</span>
+      <span class="skill-tag">SHAP</span>
+      <span class="skill-tag">LayoutLMv2</span>
+      <span class="skill-tag">RoBERTa</span>
+      <span class="skill-tag">SpaCy NER</span>
+      <span class="skill-tag">Evidently AI</span>
+      <span class="skill-tag">MLflow</span>
+      <span class="skill-tag">Azure ML</span>
+      <span class="skill-tag">pandas</span>
+    </div>
+    <div class="skill-column">
+      <div class="skill-col-title">Backend & Cloud</div>
+      <span class="skill-tag">Python</span>
+      <span class="skill-tag">FastAPI</span>
+      <span class="skill-tag">asyncio / asyncpg</span>
+      <span class="skill-tag">Spring Boot 3</span>
+      <span class="skill-tag">Node.js</span>
+      <span class="skill-tag">PostgreSQL</span>
+      <span class="skill-tag">PL/SQL</span>
+      <span class="skill-tag">Elasticsearch</span>
+      <span class="skill-tag">Azure AI Search</span>
+      <span class="skill-tag">AWS EC2</span>
+      <span class="skill-tag">Azure OpenAI</span>
+      <span class="skill-tag">Docker</span>
+    </div>
+    <div class="skill-column">
+      <div class="skill-col-title">Frontend & Enterprise</div>
+      <span class="skill-tag">React 19</span>
+      <span class="skill-tag">Redux Toolkit</span>
+      <span class="skill-tag">Vite</span>
+      <span class="skill-tag">Tailwind CSS</span>
+      <span class="skill-tag">Google Apps Script</span>
+      <span class="skill-tag">QlikSense</span>
+      <span class="skill-tag">ServiceNow</span>
+      <span class="skill-tag">SAP Ariba API</span>
+      <span class="skill-tag">SharePoint API</span>
+      <span class="skill-tag">GitHub Actions</span>
+      <span class="skill-tag">Vercel</span>
+    </div>
+  </div>
+</section>
+
+<hr class="wide-rule" style="max-width:900px;margin:0 auto;">
+
+<hr class="wide-rule" style="max-width:900px;margin:0 auto;">
+
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header">
+    <span class="section-title">Field Dispatches — Experience</span>
+  </div>
+
+  <!-- Infosys Topaz -->
+  <div class="experience-card">
+    <div class="experience-header">
+      <div>
+        <div class="experience-company">Infosys Topaz · Applied AI Practice</div>
+        <div class="experience-role">AI Engineer / Sub-team Lead</div>
+        <div style="font-family:'Special Elite',monospace;font-size:0.58rem;letter-spacing:0.1em;color:var(--ink-faint);margin-top:0.2rem;">Kolkata, India</div>
+      </div>
+      <div class="experience-date">Nov 2023 – Present</div>
+    </div>
+    <div class="experience-body">
+
+      <!-- Project 3 -->
+      <div class="experience-project">
+        <div class="experience-project-title">Project 3 · Multi-Agent Procurement Copilot · Aug 2025 – Present</div>
+        <div class="exp-metrics">
+          <div class="exp-metric-cell">
+            <div class="exp-metric-val">35%</div>
+            <div class="exp-metric-lbl">Procurement Cycle<br>Time Reduction</div>
+          </div>
+          <div class="exp-metric-cell">
+            <div class="exp-metric-val">3d→4h</div>
+            <div class="exp-metric-lbl">RFQ Turnaround<br>Time</div>
+          </div>
+          <div class="exp-metric-cell">
+            <div class="exp-metric-val">&gt;95%</div>
+            <div class="exp-metric-lbl">Workflow Completion<br>Rate</div>
+          </div>
+        </div>
+        <ul>
+          <li>Leading a team of 3 AI Engineers to architect and ship a LangGraph-orchestrated multi-agent system for a global manufacturing enterprise — delivering a 35% reduction in procurement cycle time and cutting RFQ turnaround from 3 days to 4 hours.</li>
+          <li>Architected a 5-agent graph (Planner, Supplier, Contract, Compliance, Synthesis) integrating SAP Ariba, ServiceNow, and SharePoint REST APIs via LangChain tool definitions.</li>
+          <li>Implemented vector-backed contract RAG on Azure AI Search with metadata access-control filtering; blue-green index deployments with canary health checks eliminate silent data-loss incidents.</li>
+          <li>Architected enterprise security posture: zero-secret agent design via Azure Key Vault and Managed Identity; all write operations gated behind HITL approval nodes; immutable audit logging to Azure Blob Storage for GDPR/DPA compliance.</li>
+          <li>Evaluated system across three levels: tool selection accuracy (&gt;90%), workflow completion rate (&gt;95%), and RAGAS faithfulness + SME scoring per sprint.</li>
+        </ul>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="experience-project">
+        <div class="experience-project-title">Project 2 · Insurance Claims Intelligence Platform · Nov 2024 – Sep 2025</div>
+        <div class="exp-metrics">
+          <div class="exp-metric-cell">
+            <div class="exp-metric-val">40%</div>
+            <div class="exp-metric-lbl">Claims Processing<br>Time Reduction</div>
+          </div>
+          <div class="exp-metric-cell">
+            <div class="exp-metric-val">94%</div>
+            <div class="exp-metric-lbl">Document Classifier<br>Accuracy</div>
+          </div>
+          <div class="exp-metric-cell">
+            <div class="exp-metric-val">5d→ON</div>
+            <div class="exp-metric-lbl">Retraining SLA:<br>Manual → Overnight</div>
+          </div>
+        </div>
+        <ul>
+          <li>Spearheaded a team of 4 AI Engineers to design and deploy an end-to-end claims intelligence platform for a global insurer — achieving 40% reduction in processing time across OCR, field extraction, fraud detection, and HITL routing.</li>
+          <li>Deployed Azure Document Intelligence + LayoutLMv2 classifier (94% accuracy on 15K labelled pages) for document-type routing across 12 classes — FNOL forms, medical records, police reports, and more.</li>
+          <li>Built XGBoost fraud-detection model (800K claims, 3% fraud prevalence) with SHAP explainability for audit-readiness; handled class imbalance via scale_pos_weight rather than SMOTE.</li>
+          <li>Integrated Evidently AI drift monitoring triggering automated MLflow retraining; moved from 5-day manual SLA to automated overnight retraining when PSI exceeds threshold.</li>
+        </ul>
+      </div>
+
+      <!-- Project 1 -->
+      <div class="experience-project">
+        <div class="experience-project-title">Project 1 · Enterprise Knowledge Assistant — Global Banking · Nov 2023 – Dec 2024</div>
+        <div class="exp-metrics">
+          <div class="exp-metric-cell">
+            <div class="exp-metric-val">60%</div>
+            <div class="exp-metric-lbl">Compliance Query<br>Time Reduction</div>
+          </div>
+          <div class="exp-metric-cell">
+            <div class="exp-metric-val">30k+</div>
+            <div class="exp-metric-lbl">Monthly Active<br>Users</div>
+          </div>
+          <div class="exp-metric-cell">
+            <div class="exp-metric-val">+14%</div>
+            <div class="exp-metric-lbl">Precision Gain<br>Phase 2 RAG</div>
+          </div>
+        </div>
+        <ul>
+          <li>Sub-team Lead (2 engineers): delivered a 2-phase internal GenAI assistant over a 2.5M-document corpus for a North American investment bank — reducing compliance query time by 60% at 30,000+ monthly active users.</li>
+          <li>Phase 1: Custom Python orchestration over Azure Cognitive Search (BM25 + Semantic Ranker), Azure Form Recognizer OCR, and GPT-3.5-Turbo on Azure for answer synthesis.</li>
+          <li>Phase 2: Migrated to hybrid vector + BM25 retrieval (Reciprocal Rank Fusion) — +14% precision on regulation-code queries. Upgraded to GPT-4; introduced LangChain post enterprise security review.</li>
+          <li>Enforced role-based document access via pre-retrieval metadata filters on Azure AD group memberships — model never received restricted content.</li>
+          <li>Built 200-query golden eval dataset with compliance SME; embedded evaluation gates in CI/CD; adopted RAGAS in Phase 2 for automated scoring.</li>
+        </ul>
+        <div class="scale-callout" style="margin-top:0.8rem;">
+          <div class="scale-callout-label">&#x1F4E1; Scale Context — 30,000+ MAU, Enterprise Corpus</div>
+          <p>The 2.5M-document corpus required careful indexing strategy: semantic chunking at section boundaries with document-level metadata inheritance, ensuring compliance regulation references stayed intact across chunk boundaries. At 30k MAU, Azure Cognitive Search's replica scaling kept query latency stable under concurrent load — the async Python orchestration layer ensured no thread-blocking on LLM synthesis calls, enabling horizontal scale-out without re-architecting the retrieval layer.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Infosys Systems Engineer -->
+  <div class="experience-card">
+    <div class="experience-header">
+      <div>
+        <div class="experience-company">Infosys · Logistics &amp; Data Systems Practice</div>
+        <div class="experience-role">Systems Engineer — Data &amp; Logistics</div>
+        <div style="font-family:'Special Elite',monospace;font-size:0.58rem;letter-spacing:0.1em;color:var(--ink-faint);margin-top:0.2rem;">Remote / India</div>
+      </div>
+      <div class="experience-date">Aug 2021 – Oct 2023</div>
+    </div>
+    <div class="experience-body">
+      <div class="experience-project">
+        <div class="experience-project-title">Data &amp; Logistics Operations Engineering</div>
+        <ul>
+          <li>Maintained and optimised PL/SQL stored procedures, queries, and data pipelines supporting daily logistics operations across large-scale shipping and supply chain workflows.</li>
+          <li>Administered Elasticsearch indices for real-time shipment tracking and operational search; tuned mappings and queries for throughput and latency at scale.</li>
+          <li>Built and maintained QlikSense dashboards surfacing operational KPIs for logistics and operations teams — enabling data-driven decision-making across departments.</li>
+          <li>Managed ServiceNow workflows for incident and change management, integrating with client legacy systems and internal databases.</li>
+          <li>Collaborated with cross-functional teams on client system integrations and data migration tasks, supporting scalable data architecture across the logistics practice.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Research Publication -->
+  <div class="section-header" style="margin-top:2rem;">
+    <span class="section-title" style="font-size:1.2rem;">Research Publication</span>
+  </div>
+  <div class="pub-card">
+    <div class="pub-title">How to handle bi/tri-lingual Indic texts in a single image? A new dataset of natural scene and born-digital images</div>
+    <div class="pub-meta">Multimedia Tools &amp; Applications · Springer · Vol. 81, pp. 15367–15394 (2022) · DOI: 10.1007/s11042-022-12596-7</div>
+    <p class="pub-desc">Constructed and published a novel multilingual dataset of natural scene and born-digital images containing Indic script combinations, advancing OCR and scene-text detection research for low-resource scripts. Department of CSE, Jadavpur University.</p>
+  </div>
+
+</section>
+
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header">
+    <span class="section-title">Personal Projects — Filed Reports</span>
+  </div>
+
+  <!-- PROJECT 1: AI Digest -->
+  <div class="project-card" data-animate>
+    <div class="project-card-header">
+      <div>
+        <div class="project-number">Report № 001 &nbsp;·&nbsp; Automation &nbsp;·&nbsp; LLM Pipeline</div>
+        <h2 class="project-name">AI & Data Science Daily Digest</h2>
+        <p class="project-tagline">A serverless journalist that reads the AI internet so you don't have to</p>
+      </div>
+      <span class="project-badge badge-production">Production</span>
+    </div>
+
+    <div class="project-body">
+      <p class="project-overview">
+        An automated Google Apps Script pipeline that curates, summarises, and delivers a twice-daily digest of the most important AI & Data Science news directly to your inbox — fully serverless, zero API keys required at startup, running at roughly $0.21 per month in perpetuity.
+      </p>
+
+      <div class="project-detail-grid">
+        <div class="detail-block">
+          <h4>What It Does</h4>
+          <ul>
+            <li>Monitors 29 RSS feeds across 5 quality tiers — lab blogs, research, news, DS sites, community</li>
+            <li>Scores every article with a 3-tier weighted keyword system (W3/W2/W1) — zero API cost at this stage</li>
+            <li>Sends top 40 to Gemini 2.5 Flash-Lite for smart deduplication → 15 best articles selected</li>
+            <li>Deep journalist-quality summarisation via Gemini 2.5 Flash identifying up to 5 major breakthroughs</li>
+            <li>Delivers styled HTML email at 6 AM (Morning Edition) and 4 PM (Evening Edition) daily</li>
+            <li>Index-based URL injection — model never hallucinates URLs; pure JavaScript lookup from original array</li>
+          </ul>
+        </div>
+        <div class="detail-block">
+          <h4>Engineering Decisions</h4>
+          <ul>
+            <li>Two-stage pipeline: Flash-Lite for classification (cheap), Flash for generation (quality) — 10× cost savings</li>
+            <li>responseSchema enforcement via Vertex AI — malformed JSON is structurally impossible</li>
+            <li>Date-window filtering via Script Properties — no cross-edition duplicates</li>
+            <li>Per-feed try/catch — one broken feed never blocks 28 others</li>
+            <li>429 retry with exponential backoff (15s, 30s) built in</li>
+            <li>XML sanitisation handles BOM, control chars, HTML error page detection across all feeds</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arch-box">
+        <div style="font-family:'Special Elite',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--coffee);margin-bottom:0.6rem;">Pipeline Architecture</div>
+        <div class="arch-flow">
+          <span class="arch-node">29 RSS Feeds (5 Tiers)</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">fetchRSSArticles()</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">scoreArticle() W3/W2/W1</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Top 40</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Flash-Lite Filter → 15</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Flash Summarise</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">URL Injection (JS)</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">GmailApp.sendEmail()</span>
+        </div>
+      </div>
+
+      <div class="detail-block" style="margin-top:1rem;">
+        <h4>Feed Sources (29 Total)</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:0.5rem;">
+          <div style="font-size:0.82rem;color:var(--ink-light);"><strong style="color:var(--coffee);font-family:'Special Elite',monospace;font-size:0.6rem;letter-spacing:0.1em;">TIER 1 — Major News</strong><br>TechCrunch AI, VentureBeat AI, The Verge AI, MIT Tech Review, Ars Technica, Wired AI</div>
+          <div style="font-size:0.82rem;color:var(--ink-light);"><strong style="color:var(--coffee);font-family:'Special Elite',monospace;font-size:0.6rem;letter-spacing:0.1em;">TIER 2 — Lab Blogs</strong><br>NVIDIA (×3), OpenAI, Anthropic, Google AI, Meta AI, Microsoft AI, AWS ML, HuggingFace</div>
+          <div style="font-size:0.82rem;color:var(--ink-light);"><strong style="color:var(--coffee);font-family:'Special Elite',monospace;font-size:0.6rem;letter-spacing:0.1em;">TIER 3 — Research</strong><br>ArXiv cs.AI, cs.LG, cs.CL, cs.CV, HuggingFace Daily Papers</div>
+          <div style="font-size:0.82rem;color:var(--ink-light);"><strong style="color:var(--coffee);font-family:'Special Elite',monospace;font-size:0.6rem;letter-spacing:0.1em;">TIER 4–5 — DS & Community</strong><br>KDnuggets, Towards DS, MarkTechPost, Hacker News, IEEE Spectrum AI, SiliconAngle</div>
+        </div>
+      </div>
+
+      <div class="detail-block" style="margin-top:1.2rem;">
+        <h4>Running Costs</h4>
+        <table class="mini-table">
+          <tr><th>Period</th><th>Cost</th><th>Notes</th></tr>
+          <tr><td>Per run</td><td>~$0.0036</td><td>Flash-Lite + Flash combined</td></tr>
+          <tr><td>Per day (2 runs)</td><td>~$0.007</td><td>6 AM + 4 PM triggers</td></tr>
+          <tr><td>Per month</td><td>~$0.21</td><td>Within GCP free-tier for years</td></tr>
+          <tr><td>Per year</td><td>~$2.60</td><td>Less than a coffee ☕</td></tr>
+        </table>
+      </div>
+
+      <div class="project-tech-row">
+        <span class="tech-label">Stack:</span>
+        <span class="tech-chip">Google Apps Script</span>
+        <span class="tech-chip">Gemini 2.5 Flash</span>
+        <span class="tech-chip">Vertex AI</span>
+        <span class="tech-chip">responseSchema</span>
+        <span class="tech-chip">RSS / XML</span>
+        <span class="tech-chip">GmailApp</span>
+        <span class="tech-chip">JavaScript</span>
+      </div>
+
+
+      <!-- METRICS ROW -->
+      <div class="metrics-grid">
+      </div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Annual<br>Operating Cost</div>
+        </div>
+        <div style="padding:1rem 0.8rem;border-right:1px solid var(--divider);text-align:center;background:var(--paper-aged);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">730</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Emails Sent<br>Per Year</div>
+        </div>
+        <div style="padding:1rem 0.8rem;border-right:1px solid var(--divider);text-align:center;background:var(--paper);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">10&#215;</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Cost Saved vs.<br>Single-Model Setup</div>
+        </div>
+        <div style="padding:1rem 0.8rem;text-align:center;background:var(--paper-aged);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">29</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Live RSS Feeds<br>Monitored</div>
+        </div>
+      </div>
+
+      <a href="https://github.com/Arkoprobho-Mitra/AI-Digest" target="_blank" class="project-link">View Repository on GitHub ↗</a>
+    </div>
+  </div>
+
+  <!-- PROJECT 2: Interview Prep CRON -->
+  <div class="project-card" data-animate>
+    <div class="project-card-header">
+      <div>
+        <div class="project-number">Report № 002 &nbsp;·&nbsp; Automation &nbsp;·&nbsp; Education AI</div>
+        <h2 class="project-name">Interview Prep CRON Mailer</h2>
+        <p class="project-tagline">Daily knowledge drops — automated, personalised, zero effort required</p>
+      </div>
+      <span class="project-badge badge-system">System</span>
+    </div>
+
+    <div class="project-body">
+      <p class="project-overview">
+        A scheduled CRON job system that fires daily to generate and deliver a curated set of interview preparation questions directly to a subscriber's inbox. Built on the same serverless philosophy as the AI Digest, this system demonstrates reusable agentic pipeline architecture applied to education and skills training.
+      </p>
+
+      <div class="project-detail-grid">
+        <div class="detail-block">
+          <h4>Core Features</h4>
+          <ul>
+            <li>Daily trigger via CRON scheduling — fully automated, no manual intervention required</li>
+            <li>LLM-generated interview questions tailored to technical domains</li>
+            <li>Email delivery via Gmail API integration — styled HTML output</li>
+            <li>Persistent state management to avoid question repetition across days</li>
+            <li>Configurable topic weighting — prioritise weak areas over time</li>
+          </ul>
+        </div>
+        <div class="detail-block">
+          <h4>System Design</h4>
+          <ul>
+            <li>Serverless execution on Google Apps Script — no infrastructure to maintain</li>
+            <li>Structured prompt engineering ensures consistent question quality and format</li>
+            <li>Modular architecture separates trigger, generation, and delivery concerns</li>
+            <li>Designed as a template for any recurring AI content delivery use case</li>
+            <li>Pairs with the AI Digest as a dual-pipeline daily learning stack</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="project-tech-row">
+        <span class="tech-label">Stack:</span>
+        <span class="tech-chip">Google Apps Script</span>
+        <span class="tech-chip">LLM API</span>
+        <span class="tech-chip">Gmail API</span>
+        <span class="tech-chip">CRON Triggers</span>
+        <span class="tech-chip">JavaScript</span>
+      </div>
+
+
+      <!-- METRICS ROW -->
+      <div class="metrics-grid">
+      </div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Questions Delivered<br>Per Year</div>
+        </div>
+        <div style="padding:1rem 0.8rem;border-right:1px solid var(--divider);text-align:center;background:var(--paper-aged);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">~$0</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Infrastructure<br>Cost (Serverless)</div>
+        </div>
+        <div style="padding:1rem 0.8rem;border-right:1px solid var(--divider);text-align:center;background:var(--paper);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">&lt;60s</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">End-to-End<br>Generation Time</div>
+        </div>
+        <div style="padding:1rem 0.8rem;text-align:center;background:var(--paper-aged);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">0</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Manual Steps<br>Per Delivery</div>
+        </div>
+      </div>
+
+      <a href="https://github.com/Arkoprobho-Mitra/Interviewprep_CRONJob" target="_blank" class="project-link">View Repository on GitHub ↗</a>
+    </div>
+  </div>
+
+  <!-- PROJECT 3: Agentic Job Pipeline -->
+  <div class="project-card" data-animate>
+    <div class="project-card-header">
+      <div>
+        <div class="project-number">Report № 003 &nbsp;·&nbsp; Agentic AI &nbsp;·&nbsp; Multi-Agent Orchestration</div>
+        <h2 class="project-name">Agentic Job Application Pipeline</h2>
+        <p class="project-tagline">An AI that applies to jobs — end-to-end, with judgment, not just automation</p>
+      </div>
+      <span class="project-badge badge-agentic">Agentic</span>
+    </div>
+
+    <div class="project-body">
+      <p class="project-overview">
+        A multi-agent orchestration system that handles the full job application lifecycle autonomously — from vacancy discovery and scoring to tailored application drafting. This system demonstrates production-grade agentic reasoning: agents that plan, delegate, evaluate, and execute with minimal human intervention.
+      </p>
+
+      <div class="project-detail-grid">
+        <div class="detail-block">
+          <h4>Agent Roles</h4>
+          <ul>
+            <li><strong>Scout Agent:</strong> Crawls job boards, aggregates vacancies by configured parameters</li>
+            <li><strong>Scoring Agent:</strong> Evaluates job-candidate fit using LLM reasoning + structured rubrics</li>
+            <li><strong>Writer Agent:</strong> Drafts tailored cover letters and CV summaries for top-scoring roles</li>
+            <li><strong>Coordinator:</strong> Orchestrates agent handoffs, manages state, enforces quality thresholds</li>
+          </ul>
+        </div>
+        <div class="detail-block">
+          <h4>Engineering Highlights</h4>
+          <ul>
+            <li>LangGraph-based state machine handles complex agent branching and retry logic</li>
+            <li>Human-in-the-loop checkpoint before submission — maintains oversight without blocking throughput</li>
+            <li>Pydantic schema validation at every agent boundary — structured, predictable inter-agent communication</li>
+            <li>FastAPI backend exposes pipeline status via REST endpoints for monitoring</li>
+            <li>Async execution with asyncio — concurrent scraping and scoring pipelines</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arch-box">
+        <div style="font-family:'Special Elite',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--coffee);margin-bottom:0.6rem;">Agent Orchestration Flow</div>
+        <div class="arch-flow">
+          <span class="arch-node">Scout Agent</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Vacancy Pool</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Scoring Agent</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Top N Jobs</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Writer Agent</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Human Review ✓</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Submit</span>
+        </div>
+      </div>
+
+
+      <!-- METRICS ROW -->
+      <div class="metrics-grid">
+      </div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Specialised AI<br>Agents Coordinated</div>
+        </div>
+        <div style="padding:1rem 0.8rem;border-right:1px solid var(--divider);text-align:center;background:var(--paper-aged);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">~80%</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Time Saved vs.<br>Manual Applications</div>
+        </div>
+        <div style="padding:1rem 0.8rem;border-right:1px solid var(--divider);text-align:center;background:var(--paper);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">100%</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Pydantic-Validated<br>Inter-Agent Comms</div>
+        </div>
+        <div style="padding:1rem 0.8rem;text-align:center;background:var(--paper-aged);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">1</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Human Touchpoint<br>Before Submission</div>
+        </div>
+      </div>
+
+      <div class="project-tech-row">
+        <span class="tech-label">Stack:</span>
+        <span class="tech-chip">LangGraph</span>
+        <span class="tech-chip">LangChain</span>
+        <span class="tech-chip">FastAPI</span>
+        <span class="tech-chip">Pydantic</span>
+        <span class="tech-chip">asyncio</span>
+        <span class="tech-chip">RAG</span>
+        <span class="tech-chip">Web Scraping</span>
+        <span class="tech-chip">Python</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 4: LangGraph Fact Checker -->
+  <div class="project-card" data-animate>
+    <div class="project-card-header">
+      <div>
+        <div class="project-number">Report № 004 &nbsp;·&nbsp; Agentic AI &nbsp;·&nbsp; Human-in-the-Loop</div>
+        <h2 class="project-name">LangGraph Fact-Checker with HITL</h2>
+        <p class="project-tagline">Verification pipelines that pause for human wisdom at exactly the right moment</p>
+      </div>
+      <span class="project-badge badge-agentic">Agentic</span>
+    </div>
+
+    <div class="project-body">
+      <p class="project-overview">
+        A LangGraph-powered fact-checking pipeline that orchestrates retrieval, reasoning, and verification agents — with strategically placed human-in-the-loop interrupts. The system demonstrates that the most production-ready agentic AI isn't fully autonomous: it knows when to pause, hand off to a human, and resume with enriched context.
+      </p>
+
+      <div class="project-detail-grid">
+        <div class="detail-block">
+          <h4>Pipeline Stages</h4>
+          <ul>
+            <li><strong>Claim Extractor:</strong> Parses input documents into atomic, verifiable claims</li>
+            <li><strong>Retrieval Agent:</strong> FAISS-backed RAG retrieves relevant evidence for each claim</li>
+            <li><strong>Verdict Agent:</strong> Reasoning LLM assigns Supported / Refuted / Unverifiable with confidence score</li>
+            <li><strong>HITL Interrupt:</strong> Low-confidence or contested claims routed to human reviewer</li>
+            <li><strong>Synthesis Agent:</strong> Compiles verified claims into structured fact-check report</li>
+          </ul>
+        </div>
+        <div class="detail-block">
+          <h4>LangGraph Implementation</h4>
+          <ul>
+            <li>State graph with conditional branching — confidence threshold triggers HITL node</li>
+            <li>Persistent graph state enables mid-pipeline human override without restarting</li>
+            <li>LangFuse integration for full observability — every node traced, latency and token counts logged</li>
+            <li>Retry edges handle retrieval failures and LLM timeouts gracefully</li>
+            <li>Modular node design — swap retrieval backend or verdict model independently</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arch-box">
+        <div style="font-family:'Special Elite',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--coffee);margin-bottom:0.6rem;">LangGraph State Machine</div>
+        <div class="arch-flow">
+          <span class="arch-node">Input Document</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Claim Extractor</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">RAG Retrieval (FAISS)</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Verdict Agent</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Confidence Check</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node" style="background:var(--paper);border-color:var(--red-stamp);color:var(--red-stamp);">HITL Review</span>
+          <span class="arch-arrow">→</span>
+          <span class="arch-node">Synthesis Report</span>
+        </div>
+      </div>
+
+
+      <!-- METRICS ROW -->
+      <div class="metrics-grid">
+      </div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Claim Verdict<br>Accuracy (LLM)</div>
+        </div>
+        <div style="padding:1rem 0.8rem;border-right:1px solid var(--divider);text-align:center;background:var(--paper-aged);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">100%</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Trace Coverage<br>via LangFuse</div>
+        </div>
+        <div style="padding:1rem 0.8rem;border-right:1px solid var(--divider);text-align:center;background:var(--paper);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">~60%</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Human Review<br>Load Reduced</div>
+        </div>
+        <div style="padding:1rem 0.8rem;text-align:center;background:var(--paper-aged);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">0</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Pipeline Restarts<br>on HITL Override</div>
+        </div>
+      </div>
+
+      <div class="project-tech-row">
+        <span class="tech-label">Stack:</span>
+        <span class="tech-chip">LangGraph</span>
+        <span class="tech-chip">FAISS</span>
+        <span class="tech-chip">RAG</span>
+        <span class="tech-chip">LangFuse</span>
+        <span class="tech-chip">FastAPI</span>
+        <span class="tech-chip">Pydantic</span>
+        <span class="tech-chip">Python</span>
+        <span class="tech-chip">Anthropic SDK</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 5: Full-Stack Job Aggregator -->
+  <div class="project-card" data-animate>
+    <div class="project-card-header">
+      <div>
+        <div class="project-number">Report № 005 &nbsp;·&nbsp; Full-Stack &nbsp;·&nbsp; LLM Scoring &nbsp;·&nbsp; Deployed</div>
+        <h2 class="project-name">Full-Stack Job Aggregator with LLM Scoring</h2>
+        <p class="project-tagline">From raw vacancies to ranked opportunities — intelligence applied at scale, live on Vercel</p>
+      </div>
+      <span class="project-badge badge-production">Production · Vercel</span>
+    </div>
+
+    <div class="project-body">
+      <p class="project-overview">
+        A production-deployed full-stack application that aggregates job listings from multiple sources, applies LLM-based relevance scoring against a candidate profile, and presents ranked opportunities through a React frontend. This is the complete picture — scraping to scoring to UI — deployed and accessible on Vercel.
+      </p>
+
+      <div class="project-detail-grid">
+        <div class="detail-block">
+          <h4>Frontend (React + Vite)</h4>
+          <ul>
+            <li>React with Vite for fast HMR and optimised production builds</li>
+            <li>Tailwind CSS for rapid, consistent styling across components</li>
+            <li>Real-time job feed with filter, sort, and LLM score display</li>
+            <li>Candidate profile configuration — skills, seniority, location preferences</li>
+            <li>Deployed on Vercel with automatic CI/CD from GitHub</li>
+          </ul>
+        </div>
+        <div class="detail-block">
+          <h4>Backend (FastAPI + PostgreSQL)</h4>
+          <ul>
+            <li>FastAPI async endpoints for job ingestion and scoring API</li>
+            <li>PostgreSQL with asyncpg — non-blocking DB operations under load</li>
+            <li>APScheduler for periodic scraping runs — keeps listing freshness without user-triggered pulls</li>
+            <li>LLM scoring pipeline evaluates each job against candidate profile via structured prompting</li>
+            <li>GitHub Actions CI for test, lint, and deploy on every push</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="detail-block">
+        <h4>LLM Scoring Architecture</h4>
+        <ul>
+          <li>Each job description vectorised and compared against candidate profile embedding — semantic similarity pre-filter</li>
+          <li>Top candidates passed to LLM for nuanced scoring: skill match, seniority alignment, cultural signals</li>
+          <li>Scores returned as structured JSON via Pydantic schema enforcement — no free-text parsing required</li>
+          <li>Score explanations surfaced in the UI — recruiters see why each job scored, not just the number</li>
+        </ul>
+      </div>
+
+
+      <!-- METRICS ROW -->
+      <div class="metrics-grid">
+      </div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Faster Job Discovery<br>vs. Manual Search</div>
+        </div>
+        <div style="padding:1rem 0.8rem;border-right:1px solid var(--divider);text-align:center;background:var(--paper-aged);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">&lt;2s</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Full Page<br>Load (Vercel CDN)</div>
+        </div>
+        <div style="padding:1rem 0.8rem;border-right:1px solid var(--divider);text-align:center;background:var(--paper);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">100%</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Structured LLM Output<br>via Pydantic Schema</div>
+        </div>
+        <div style="padding:1rem 0.8rem;text-align:center;background:var(--paper-aged);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">Auto</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">CI/CD on Every<br>GitHub Push</div>
+        </div>
+      </div>
+
+      <div class="project-tech-row">
+        <span class="tech-label">Stack:</span>
+        <span class="tech-chip">React</span>
+        <span class="tech-chip">Vite</span>
+        <span class="tech-chip">Tailwind CSS</span>
+        <span class="tech-chip">FastAPI</span>
+        <span class="tech-chip">PostgreSQL</span>
+        <span class="tech-chip">asyncpg</span>
+        <span class="tech-chip">APScheduler</span>
+        <span class="tech-chip">LLM Scoring</span>
+        <span class="tech-chip">Vercel</span>
+        <span class="tech-chip">GitHub Actions</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 6: Viridi Cervus Website -->
+  <div class="project-card" data-animate>
+    <div class="project-card-header">
+      <div>
+        <div class="project-number">Report &#8470; 006 &nbsp;·&nbsp; Full-Stack E-Commerce &nbsp;·&nbsp; Microservices &nbsp;·&nbsp; AI-Powered</div>
+        <h2 class="project-name">Viridi Cervus &#x1F98C;&#x1F6CD;&#xFE0F;</h2>
+        <p class="project-tagline">An enterprise-grade, AI-powered e-commerce platform &mdash; microservices, RAG shopping assistant, deep learning reviews, semantic search</p>
+      </div>
+      <span class="project-badge badge-production">Full Platform</span>
+    </div>
+    <div class="project-body">
+      <p class="project-overview">
+        Viridi Cervus is an advanced, AI-powered multi-service modern e-commerce platform built from the ground up for performance, scalability, and an unparalleled shopping experience. It spans five distinct services &mdash; a React 19 frontend, a Spring Boot enterprise backend with RAG, a Python FastAPI async service, a Node.js AI semantic search microservice, and a RoBERTa + XGBoost NLP pipeline for automated review intelligence.
+      </p>
+
+      <!-- METRICS ROW -->
+      <div class="metrics-grid">
+        <div class="metrics-grid-cell"><div class="metrics-val">10k+</div><div class="metrics-lbl">Concurrent Users<br>Supported</div></div>
+        <div class="metrics-grid-cell"><div class="metrics-val">~85%</div><div class="metrics-lbl">Review Processing<br>Cost Eliminated</div></div>
+        <div class="metrics-grid-cell"><div class="metrics-val">3&times;</div><div class="metrics-lbl">Search Relevance<br>vs. Keyword</div></div>
+        <div class="metrics-grid-cell"><div class="metrics-val">&lt;200ms</div><div class="metrics-lbl">API Response<br>p95 Latency</div></div>
+      </div>
+
+      <div class="project-detail-grid">
+        <div class="detail-block">
+          <h4>AI &amp; Intelligence Layer</h4>
+          <ul>
+            <li><strong>RAG Shopping Assistant:</strong> Gemini 1.5 Flash + product descriptions + NLP-extracted review aspects &mdash; answers specific customer questions conversationally, reducing support ticket volume by an estimated 40%</li>
+            <li><strong>Review Intelligence Pipeline:</strong> Fine-tuned RoBERTa (roberta-base) extracts dense embeddings; XGBoost regressor predicts accurate sentiment scores across aspects like Fabric, Fit, Quality &mdash; fully automated, zero human labelling required at inference</li>
+            <li><strong>Semantic Search Microservice:</strong> @xenova/transformers local embeddings interpret search <em>intent</em>, not just keywords; fast-levenshtein fuzzy matching auto-corrects typos &mdash; surfacing the right product even when the user doesn't know its exact name</li>
+          </ul>
+        </div>
+        <div class="detail-block">
+          <h4>Backend Architecture</h4>
+          <ul>
+            <li><strong>Spring Boot 3.2.4 (Java 17):</strong> Enterprise-grade core backend handling order processing, dynamic CSV ingestion, and RAG controller &mdash; Spring Security + JWT for stateless auth across all services</li>
+            <li><strong>FastAPI + asyncpg:</strong> High-throughput async Python service for data-intensive operations; SQLAlchemy 2.0 + Alembic migrations; capable of handling 10k+ concurrent requests without blocking</li>
+            <li><strong>Distributed JWT Auth:</strong> Single token signed by Spring Boot, decoded by FastAPI and Node.js &mdash; eliminates per-request DB auth lookups, reducing auth overhead by ~70%</li>
+            <li><strong>PostgreSQL + H2:</strong> Production-grade relational persistence with fast in-memory fallback for development &mdash; zero-downtime dev/prod parity</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="project-detail-grid" style="margin-top:0;">
+        <div class="detail-block">
+          <h4>Frontend Engineering</h4>
+          <ul>
+            <li>React 19.1.0 with Redux Toolkit for complex global state across cart, auth, and product browsing flows</li>
+            <li>React Router DOM for client-side navigation; React Sliding Pane for interactive sidebar UX</li>
+            <li>Web Vitals monitored &mdash; LCP, FID, CLS tracked for Core Web Vitals compliance</li>
+            <li>React Testing Library coverage &mdash; unit-tested component behaviour, not just renders</li>
+          </ul>
+        </div>
+        <div class="detail-block">
+          <h4>Business Impact Metrics</h4>
+          <ul>
+            <li>Automated review sentiment extraction replaces what would cost ~$15k/yr in manual annotation at scale</li>
+            <li>Semantic search reduces zero-result searches by an estimated 60% vs. keyword-only systems</li>
+            <li>RAG assistant handles product Q&amp;A that would otherwise require a human support agent &mdash; 24/7, at near-zero marginal cost</li>
+            <li>Microservice isolation means each service can scale independently &mdash; search spikes don't affect checkout throughput</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arch-box">
+        <div style="font-family:'Special Elite',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--coffee);margin-bottom:0.6rem;">Microservice Architecture</div>
+        <div class="arch-flow">
+          <span class="arch-node">React 19 SPA</span>
+          <span class="arch-arrow">&#8594;</span>
+          <span class="arch-node">Spring Boot (RAG + Auth)</span>
+          <span class="arch-arrow">&#8594;</span>
+          <span class="arch-node">Gemini 1.5 Flash</span>
+        </div>
+        <div class="arch-flow" style="margin-top:0.4rem;">
+          <span class="arch-node">React 19 SPA</span>
+          <span class="arch-arrow">&#8594;</span>
+          <span class="arch-node">FastAPI (async)</span>
+          <span class="arch-arrow">&#8594;</span>
+          <span class="arch-node">PostgreSQL</span>
+        </div>
+        <div class="arch-flow" style="margin-top:0.4rem;">
+          <span class="arch-node">React 19 SPA</span>
+          <span class="arch-arrow">&#8594;</span>
+          <span class="arch-node">Node.js Search</span>
+          <span class="arch-arrow">&#8594;</span>
+          <span class="arch-node">@xenova Embeddings</span>
+        </div>
+        <div class="arch-flow" style="margin-top:0.4rem;">
+          <span class="arch-node">Raw Reviews (CSV)</span>
+          <span class="arch-arrow">&#8594;</span>
+          <span class="arch-node">RoBERTa Embeddings</span>
+          <span class="arch-arrow">&#8594;</span>
+          <span class="arch-node">XGBoost Scores</span>
+          <span class="arch-arrow">&#8594;</span>
+          <span class="arch-node">RAG Context</span>
+        </div>
+        <div style="margin-top:0.6rem;font-size:0.6rem;color:var(--ink-faint);letter-spacing:0.05em;">JWT token flow: Spring Boot signs &#8594; FastAPI verifies &#8594; Node.js verifies &mdash; stateless across all 3 services</div>
+      </div>
+
+      <div class="project-tech-row">
+        <span class="tech-label">Stack:</span>
+        <span class="tech-chip">React 19</span>
+        <span class="tech-chip">Redux Toolkit</span>
+        <span class="tech-chip">Spring Boot 3</span>
+        <span class="tech-chip">Java 17</span>
+        <span class="tech-chip">FastAPI</span>
+        <span class="tech-chip">Node.js</span>
+        <span class="tech-chip">Gemini 1.5 Flash</span>
+        <span class="tech-chip">RoBERTa</span>
+        <span class="tech-chip">XGBoost</span>
+        <span class="tech-chip">PostgreSQL</span>
+        <span class="tech-chip">JWT</span>
+        <span class="tech-chip">@xenova/transformers</span>
+      </div>
+
+      <a href="https://github.com/Arkoprobho-Mitra/viridi-cervus-website" target="_blank" class="project-link">View Repository on GitHub &#8599;</a>
+    </div>
+  </div>
+
+  <!-- PROJECT 7: Web Scraper for AWS Exam -->
+  <div class="project-card" data-animate>
+    <div class="project-card-header">
+      <div>
+        <div class="project-number">Report № 007 &nbsp;·&nbsp; Tooling &nbsp;·&nbsp; Web Scraping</div>
+        <h2 class="project-name">AWS Exam Question Scraper</h2>
+        <p class="project-tagline">Beautiful Soup meets certification prep — structured knowledge, on demand</p>
+      </div>
+      <span class="project-badge badge-system">Tooling</span>
+    </div>
+
+    <div class="project-body">
+      <p class="project-overview">
+        A targeted web scraper built with Beautiful Soup that harvests AWS certification exam questions from public practice repositories, cleans and structures the data, and outputs a professional Word document questionnaire — ready for offline study. A precise, no-frills tool that solves a specific problem well.
+      </p>
+
+      <div class="project-detail-grid">
+        <div class="detail-block">
+          <h4>What It Solves</h4>
+          <ul>
+            <li>AWS practice questions scattered across multiple web pages — single scrape consolidates all</li>
+            <li>Raw HTML into clean, structured question-answer pairs with proper formatting</li>
+            <li>Outputs a polished .docx questionnaire — printable, shareable, offline-friendly</li>
+            <li>Configurable scraping depth — target specific exam domains or scrape everything</li>
+          </ul>
+        </div>
+        <div class="detail-block">
+          <h4>Technical Details</h4>
+          <ul>
+            <li>Beautiful Soup 4 for robust HTML parsing across varied page structures</li>
+            <li>Requests with session management and respectful rate limiting</li>
+            <li>python-docx for structured Word document generation with proper heading hierarchy</li>
+            <li>Error handling for 404s, malformed HTML, and network timeouts</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="project-tech-row">
+        <span class="tech-label">Stack:</span>
+        <span class="tech-chip">Python</span>
+        <span class="tech-chip">Beautiful Soup 4</span>
+        <span class="tech-chip">Requests</span>
+        <span class="tech-chip">python-docx</span>
+        <span class="tech-chip">Web Scraping</span>
+      </div>
+
+
+      <!-- METRICS ROW -->
+      <div class="metrics-grid">
+      </div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Questions Scraped<br>&amp; Structured</div>
+        </div>
+        <div style="padding:1rem 0.8rem;border-right:1px solid var(--divider);text-align:center;background:var(--paper-aged);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">~95%</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">HTML Parse<br>Success Rate</div>
+        </div>
+        <div style="padding:1rem 0.8rem;border-right:1px solid var(--divider);text-align:center;background:var(--paper);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">&lt;30s</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Full Scrape<br>Runtime</div>
+        </div>
+        <div style="padding:1rem 0.8rem;text-align:center;background:var(--paper-aged);">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--coffee);line-height:1;">1-Click</div>
+          <div style="font-family:'Special Elite',monospace;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:0.3rem;">Offline .docx<br>Output Ready</div>
+        </div>
+      </div>
+
+      <a href="https://github.com/Arkoprobho-Mitra/Web-Scrapper-for-AWS-Exam" target="_blank" class="project-link">View Repository on GitHub ↗</a>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- CONTACT SECTION -->
+<section id="contact">
+  <div class="section-header">
+    <span class="section-title">Get In Touch</span>
+  </div>
+
+  <div class="contact-card">
+    <p class="contact-tagline">Open to remote AI Engineer roles &nbsp;·&nbsp; Agentic systems &nbsp;·&nbsp; Collaborations</p>
+
+    <div class="contact-block">
+      <a href="mailto:arko.mitra223@gmail.com?subject=Opportunity%20-%20Let%27s%20Connect" class="contact-row">
+        <span class="contact-icon">✉</span>
+        <span>
+          <span class="contact-label">Email</span>
+          <span class="contact-value">arko.mitra223@gmail.com</span>
+        </span>
+      </a>
+
+      <a href="tel:+917908491618" class="contact-row">
+        <span class="contact-icon">☏</span>
+        <span>
+          <span class="contact-label">Phone</span>
+          <span class="contact-value">+91 79084 91618</span>
+        </span>
+      </a>
+
+      <a href="tel:+917557014848" class="contact-row">
+        <span class="contact-icon">☏</span>
+        <span>
+          <span class="contact-label">Alternate</span>
+          <span class="contact-value">+91 75570 14848</span>
+        </span>
+      </a>
+
+      <a href="https://www.linkedin.com/in/arkoprobho-mitra-723345287" target="_blank" class="contact-row">
+        <span class="contact-icon">in</span>
+        <span>
+          <span class="contact-label">LinkedIn</span>
+          <span class="contact-value">linkedin.com/in/arkoprobho-mitra-723345287</span>
+        </span>
+      </a>
+
+      <a href="https://github.com/Arkoprobho-Mitra" target="_blank" class="contact-row">
+        <span class="contact-icon">⌥</span>
+        <span>
+          <span class="contact-label">GitHub</span>
+          <span class="contact-value">github.com/Arkoprobho-Mitra</span>
+        </span>
+      </a>
+    </div>
+
+    <div class="contact-social">
+      <a href="Arkoprobho_Mitra_CV_revised.pdf" download="Arkoprobho_Mitra_CV.pdf" class="btn"><span>Download CV ↓</span></a>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer id="page-footer">
+  <div class="ornament">— ✦ —</div>
+  <div class="footer-name">Arkoprobho Mitra</div>
+  <p>AI Engineer · LLM Systems · Agentic Pipelines · AWS Certified Cloud Practitioner</p>
+  <p>Kolkata, India &nbsp;·&nbsp; Infosys Topaz Applied AI Practice</p>
+  <hr class="footer-divider">
+  <p style="font-size:0.55rem;color:var(--coffee-pale);letter-spacing:0.12em;">
+    Printed on recycled electrons · Est. 2021 · Kolkata Dispatch · B.E. Jadavpur University
+  </p>
+</footer>
+
+<div id="contact-toast">Email copied — arko.mitra223@gmail.com</div>
+
+<script>
+  // Scroll-triggered animations for project cards
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+
+  // Contact button: open mail client + copy email to clipboard as fallback
+  const EMAIL = 'arko.mitra223@gmail.com';
+  const toast = document.getElementById('contact-toast');
+  let toastTimer;
+
+  document.querySelectorAll('a[href^="mailto:"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      navigator.clipboard.writeText(EMAIL).then(() => {
+        clearTimeout(toastTimer);
+        toast.classList.add('show');
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+      }).catch(() => {});
+    });
+  });
+</script>
+</body>
+</html>
